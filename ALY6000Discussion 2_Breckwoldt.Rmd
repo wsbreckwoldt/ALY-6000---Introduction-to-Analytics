@@ -1,0 +1,57 @@
+---
+title: "Module 2 Discussion Primary Post_Breckwoldt"
+author: "Will Breckwoldt"
+date: "9/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Create an R Markdown file and import the attached data set Discussion2Data.csv into your ALY2010 R Project.
+
+```{r}
+DB2_table = read.csv("Discussion2Data.csv", header = TRUE)
+```
+
+2. Select a numerical variable, and using R, obtain basic descriptive statistics for that variable: mean, standard deviation, median, minimum value, maximum value, range, 25th, 50th and 75th quantiles.
+
+```{r}
+summary(DB2_table)
+
+summary(DB2_table$ShippingCost)
+
+sd(DB2_table$ShippingCost)
+
+```
+3. Save each value as an object and use them to create a table.
+
+```{r}
+
+
+```
+
+
+
+4. Present the codes and table on your Discussion as JPG images.
+
+
+
+5. Using R, prepare one box plot to display the data distribution of that numerical variable in regard to a categorical variable of your choice.
+
+
+
+6. Provide labels (title, x-axis label, y-axis label), colors, change ylim on the box plot, etc. Make sure your figure look good.
+
+
+
+7. Present the codes and box plot.
+
+
+
+
+
+IMPORTANT: The titles of your figures MUST contain your name and last name. This must be done using the corresponding R code.
+
+Save the table and box plot on your computer as JPG files, then upload them into your discussion using the Insert Image option.
