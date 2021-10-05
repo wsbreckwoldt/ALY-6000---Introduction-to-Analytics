@@ -1,0 +1,484 @@
+---
+title: "Breckwoldt_Project2"
+author: "Will Breckwoldt"
+date: "10/4/2021"
+output: html_document
+---
+
+---
+Title 
+---
+
+<P><BR>
+<CENTER>
+<FONT SIZE = 4, COLOR="#2C32C3">
+<B>ALY6000 Introduction to Analytics</B>
+<BR><B>Northeastern University</B>
+<BR>Will Breckwoldt
+<BR>Date: 'r format(Sys.time(), "%d %B, %Y)'
+<P>Project Report
+</FONT>
+</CENTER>
+
+---
+Library Data
+---
+<P><BR>
+
+```{r libraries data, message=FALSE, warning=FALSE}
+#import libraries
+library(readxl)
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+
+# Data sets (add importing codes here)
+M2Data = read_excel("DataSets/M2Project_V2.xlsx")
+```
+
+---
+Introduction
+---
+
+<P><BR>
+<FONT SIZE = 4, COLOR = "#A11515"></B>
+Introduction
+</B></FONT>
+
+<P><BR>
+As a data analyst, one must create understandable data visualizations and clearly summarize the data for executives. For this assignment, I will create an executive summary based on the dataset provided by the professor and thereby demonstrate my ability to process data, present the data visually, and calculate basic; all with explanatory analysis.
+
+
+
+---
+Analysis
+---
+
+<P><BR>
+<FONT SIZE = 4, COLOR="#4036D2"></B>
+Analysis section
+</B></FONT>
+
+---
+Task 1
+---
+
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 1
+</FONT>
+<BR>
+Present the first 3 and last 5 records from the dataset.
+
+```{r Task1}
+# Codes to solve task
+a = head(M2Data, 3)
+b = tail(M2Data, 5)
+
+c = rbind(a,b)
+knitr::kable(head(c), "simple")
+
+```
+
+
+---
+Task 2
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 2
+</FONT>
+<BR>
+Present a table with all categories of Market and their frequencies.
+```{r}
+table(M2Data$Market)
+```
+
+
+---
+Task 3
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 3
+</FONT>
+<BR>
+Present the results of task 2 using a horizontal bar graph.
+```{r}
+d = table(M2Data$Market)
+
+#Import RColorBrewer
+library(RColorBrewer)
+
+#Add values to each bar.
+
+#Increase limits to ensure that the tallest bar is observed with its values.
+
+e = barplot(d,
+     horiz = TRUE,
+     xlim = c(0,400),
+     col = brewer.pal(9,"Set1"),
+     las = 1,
+     cex.axis = 1.1,
+     cex.names = 1.1
+)
+text(d, 
+     e, 
+     d, 
+     cex=0.8, 
+     pos = 3)
+```
+
+---
+Task 4
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 4
+</FONT>
+<BR>
+Using code filter(), from library(dplyr), filter all observations for the African Market.
+```{r}
+t4Africa = dplyr::filter(M2Data, Market=="Africa")
+t4Africa
+```
+Use the name of the object (t4Africa) to create a pie chart displaying product category and their frequencies.  Remember that you need to create a table with the data, otherwise the code pie() will not create the right graph.
+```{r}
+#first table
+f = table(t4Africa$Product_Category)
+
+# Table calculating percentages
+g = f/nrow(t4Africa)*100
+
+#Define labels
+pieLabels = paste(unique(sort(t4Africa$Product_Category)),
+                  "",
+                  "\n",
+                  "n=",
+                  sort(f), 
+                  "\n", 
+                  round(g,1),
+                  "%")
+
+#Basic Plot of Pie Chart
+pie1 = pie(f,
+           labels= pieLabels,
+           radius = 0.8)
+
+```
+
+---
+Task 5
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 5
+</FONT>
+<BR>
+Improve that graph with labels, title, and colors.  Make sure that all names are displayed.  You can create a horizontal or vertical bar plot.
+```{r}
+t5bar = barplot(table(t4Africa$Product_SubCategory),
+                main = "Product SubCategory Frequencies",
+                xlab = "Product Subcategories",
+                ylab = "Frequency",
+                col = terrain.colors(12),
+                ylim = c(0, 14),
+                las = 2
+                )
+
+text(y= table(t4Africa$Product_SubCategory),
+     t5bar,
+     table(t4Africa$Product_SubCategory),
+     cex=0.8,
+     pos=3
+     )
+```
+
+---
+Task 6
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 6
+</FONT>
+<BR>
+What are the mean sales per subcategory in the African Market?
+```{r}
+
+meanSales = tapply(X = t4Africa$Sales, INDEX = t4Africa$Product_SubCategory, FUN = mean, na.rm= T) 
+knitr::kable(meanSales)
+
+```
+Use a dot plot to display the information.
+
+```{r}
+dotchart(meanSales)
+```
+
+---
+Task 7
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 7
+</FONT>
+<BR>
+What are the total sales per Region in the African Market?
+```{r}
+totSales = tapply(X = t4Africa$Sales, INDEX = t4Africa$Region, FUN = sum, na.rm= T) 
+knitr::kable(totSales)
+```
+
+---
+Task 8
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 8
+</FONT>
+<BR>
+What are the mean shipping costs per Region in the African Market?
+```{r}
+meanShipping = tapply(X = t4Africa$ShippingCost, INDEX = t4Africa$Region, FUN = mean, na.rm= T) 
+knitr::kable(meanShipping)
+
+
+```
+
+Use a bar plot to display the information.  Add colors, labels, extend the y-axis limits, and display the vlues on top of each bar.
+```{r}
+meanShipping_table = table(meanShipping)
+
+t8bar = barplot(meanShipping,
+                main = "Regions' Mean Shipping Costs",
+                xlab = "Region",
+                ylab = "Mean Shipping Cost",
+                ylim = c(0, 450),
+                col = terrain.colors(12),
+                las = 1,
+                cex.axis = 1.1,
+                cex.names = 1.1
+                 )
+              
+
+text(y= tapply(X = t4Africa$ShippingCost, INDEX = t4Africa$Region, FUN = mean, na.rm= T),
+     t8bar,
+     tapply(X = t4Africa$ShippingCost, INDEX = t4Africa$Region, FUN = mean, na.rm= T), 
+     cex= 0.8,
+     pos= 3
+     )
+```
+
+
+---
+Task 9
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 9
+</FONT>
+<BR>
+Make a summary of tasks 3 to 8. 
+What is the data analysis process you just followed and what information you were able to obtain?
+<BR>
+Task 3: The boxplot tells us that the Asian Pacific market is the most popular market with the most observations and the African market is the least popular with the least amount of observations.
+
+Task 4: I filtered observations in the African market by Product Category and presented by findings with a piechart.
+
+Task 5: I made a histogram, which displayed Product Subcategories and their frequency in the African market.
+
+Task 6: I found the mean sales of Product Subcategories in the African Region.
+
+Task 7: I displayed the total sales per Region in Africa.
+
+Task 8: I found the mean shipping cost per Region in Africa.
+
+
+---
+Task 10
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 10
+</FONT>
+<BR>
+Explain the differences on data type designations used in R: integer, factor, double, numeric. 
+
+Integer: a type of numeric data without decimals.  For example, the number of people in a course.
+
+Factor: categorical variables that can be either numeric or string variables.
+
+Double: stands for "double-precision floating-point"; numbers with decimals.
+
+Numeric: continuous variables that can be measured with numbers; includes integer and double numbers.
+
+
+
+<BR>
+
+
+
+
+
+
+---
+Task 11
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 11
+</FONT>
+<BR>
+Go back to the original data set M2Data.  Add colors to both graphs, change orientation of y-axis labels in the histogram, improve x-axis label on the histogram.
+<BR>
+```{r}
+# Use par() code to organize graphs in a matrix of 2 rows ad 1 column
+par(mfcol=c(2,1))
+
+#Present a box plot of all profits
+boxplot(M2Data$Profits, 
+        col = "blue",
+        horizontal = T)
+
+#Present a histogram of all profits
+
+hist(M2Data$Profits,
+     ylim= c(0,450),
+     xlim= c(-1500,1500),
+     xlab= "Profits",
+     breaks = 50,
+     xaxp = c(-1500, 1500, 10),
+     main = "Frequency of Profits",
+     las = 1
+     )
+```
+
+---
+Task 12
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 12
+</FONT>
+<BR>
+Make observations of the two graphs you obtained on task 11. Each graph tells a different story of 
+your data. 
+Notice the negative values, comment on them
+<BR>
+According to the box plot, Quartile Group 1 or the lower whisker are negative values, therefore 25% of profits are negative, suggesting a loss. Fortunately 75% of our profits are greater than 0.The box plot also suggest that there are many outliers in our data set. According to the histogram, we seen our highest frequency of profits are between 0 and 200.
+
+
+
+
+
+---
+Task 13
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 13
+</FONT>
+<BR>
+Using the strategies you learn above, analyze the profits from the Latin American market.
+
+a. Filter the data for Latin America: Code filter(). Name this new data subset as t13LATAM. Do not 
+present this new data subset.
+
+```{r}
+filter(M2Data, Market=="LATAM")
+
+t13LATAM = filter(M2Data, Market=="LATAM")
+```
+
+b. Similar to the codes used on task 11, present a box plot and a histogram to display profit 
+information only from the Latin American market (t13LATAM).
+
+```{r}
+# Use par() code to organize graphs in a matrix of 2 rows ad 1 column
+par(mfcol=c(2,1))
+
+#Present a box plot of all profits
+boxplot(t13LATAM$Profits, 
+        col = "blue",
+        horizontal = T)
+
+#Present a histogram of all profits
+
+hist(t13LATAM$Profits,
+     xlab= "Profits",
+     breaks = 50,
+     xaxp = c(-1500, 1500, 10),
+     main = "Frequency of Profits",
+     las = 1
+     )
+```
+Make observations about your two graphs. 
+
+The boxplot suggests that variance for LATAM is higher than the variance of all of the markets.  They also have fewer outliers in proportion to the total amount of data.  Furthermore,  the location of the 25th percentile is positive, suggesting that this region is performing above global standards.
+
+The histogram tells use that there are few instances when profits are negative and that most of our profits from LATAM are between 0 and 1,000.
+
+
+---
+Task 14
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 14
+</FONT>
+<BR>
+Using the Latin American data, present a table with the total sales per region: codes tapply() and 
+knitr::kable().
+
+```{r}
+t14 = tapply(X = t13LATAM$Sales, INDEX = t13LATAM$Region, FUN = sum, na.rm= T) 
+knitr::kable(t14)
+```
+
+
+---
+Task 15
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 15
+</FONT>
+<BR>
+Present a box plot displaying the distribution of profits from the 3 regions in the Latin American 
+market (t13LATAM). 
+
+```{r}
+boxplot(t13LATAM$Profits
+        )
+
+```
+
+
+
+
+---
+Task 16
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+Task 16
+</FONT>
+<BR>
+Make observations of the results you obtained on tasks 13 and 14. 
+<BR>
+Task 14: The output tells us that Central America has the most sales in the Latin America market, followed by South America, than the Caribbean.  
+<BR>
+Task 15: Our LATAM boxplot demonstrates that more than 75% of our data is between 0 and 500 and that there are four outliers.
+
+---
+CONCLUSIONS
+---
+<P><BR>
+<FONT SIZE = 4, COLOR="#A11515">
+CONCLUSIONS
+</FONT>
+<BR>
+In conclusion, this executive summary has identified the most popular and profitable markets and regions.  We learned that the Asian Pacific is the most popular market with the most observations, and the African market is the least popular with the least observations.  Observations in the African market were filtered by Product Category and findings were presented with a pie chart. A histogram was created that displays Product SubCategories and their frequencies in the African market.  The total sales per region in Africa is displayed, as well as the mean shipping cost per region in Africa.  I defined the different data designation used in R.  The frequency of total profits in the entire data set is shown.  Observations were made based on box plots that represented profits among total observations.  Profits were analyzed in the Latin American market.  Total sales per region in Latin America is displayed.  Displayed are also box plots that demonstrate the distribution of profit in Latin America regions.
+
+Throughout the executive summary, I presented easily understandable data visualizations.  The code is such that I can easily go back and make addition inferences on profits and sales per region and market.  This assignment has demonstrated my ability to analyze data sets with R, make observations, and present them to executives.
