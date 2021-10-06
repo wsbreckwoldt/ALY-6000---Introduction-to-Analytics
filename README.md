@@ -4,10 +4,10 @@ Assignments completed in ALY 6000: Introduction to Analytics at Northeastern Uni
 1) Module 1 Project
       - Final project for the course ith R Final Project
       - Healthcare Data Analysis
-      - 
+       
       a) Breckwoldt_Project1.R
       - R code
-      - 
+       
       b) Breckwoldt_Project1.html 
       - Word doc report
 
