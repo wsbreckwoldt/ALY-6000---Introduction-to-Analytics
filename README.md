@@ -12,4 +12,9 @@ Assignments completed in ALY 6000: Introduction to Analytics at Northeastern Uni
       - PDF Report
 
 2) Module 2 Project
-      -
+      - Executive Summary
+      - Evaluated revenue and sales in various markets and regions
+      a) Breckwoldt_Project2.Rmd
+      - Rmarkdown code
+      b)Breckwoldt_Project2.pdf
+      - PDF Report
